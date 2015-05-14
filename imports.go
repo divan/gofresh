@@ -32,7 +32,7 @@ func Imports(dir string) ([]string, error) {
 
 	// Convert map to slice and sort
 	var ret []string
-	for name, _ := range imports {
+	for name := range imports {
 		ret = append(ret, name)
 	}
 	sort.Strings(ret)

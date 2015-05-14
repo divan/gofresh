@@ -75,15 +75,15 @@ func main() {
 		outdated = Packages{}
 	}
 
-	hasUpdate := len(outdated) > 0
-	if !hasUpdate {
+	upToDate := len(outdated) == 0
+	if upToDate {
 		fmt.Println("Everything is up to date.")
 		return
-	} else {
-		for _, pkg := range outdated {
-			fmt.Println(pkg)
-		}
-		fmt.Printf(green("---\nYou have %d packages out of date\n", len(outdated)))
-		fmt.Println("To update all packages automatically, run", bold("gofresh -update"))
 	}
+
+	for _, pkg := range outdated {
+		fmt.Println(pkg)
+	}
+	fmt.Printf(green("---\nYou have %d packages out of date\n", len(outdated)))
+	fmt.Println("To update all packages automatically, run", bold("gofresh -update"))
 }
