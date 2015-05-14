@@ -5,11 +5,10 @@ import (
 	"strings"
 )
 
-func Run(command, dir string) ([]string, error) {
-	args := strings.Fields(command)
-	cmd := exec.Command(args[0], args[1:]...)
+func Run(dir, command string, args ...string) ([]string, error) {
+	cmd := exec.Command(command, args...)
 	cmd.Dir = dir
-	out, err := cmd.CombinedOutput()
+	out, err := cmd.Output()
 	if err != nil {
 		return nil, err
 	}

@@ -4,11 +4,14 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"golang.org/x/tools/go/vcs"
 )
 
 type Package struct {
 	Name string
 	Dir  string
+	Repo *vcs.RepoRoot
 
 	Commits Commits
 }
@@ -19,19 +22,34 @@ var emojiRune = '✅'
 
 func NewPackage(name, gopath string) *Package {
 	dir := filepath.Join(gopath, "src", name)
+	repo, err := vcs.RepoRootForImportPath(name, false)
+	if err != nil {
+		return nil
+	}
 	return &Package{
 		Name: name,
 		Dir:  dir,
+
+		Repo: repo,
 	}
 }
 
 func (p *Package) Refresh() error {
-	git := NewGit(p.Dir)
-	if err := git.Update(); err != nil {
+	var vcs VCS
+	switch p.Repo.VCS.Name {
+	case "Git":
+		vcs = NewGit(p.Dir)
+	case "Mercurial":
+		vcs = NewHg(p.Dir)
+	default:
+		return fmt.Errorf("unknown VCS")
+	}
+
+	if err := vcs.Update(); err != nil {
 		return err
 	}
 
-	p.Commits = git.Commits()
+	p.Commits = vcs.Commits()
 	return nil
 }
 

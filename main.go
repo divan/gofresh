@@ -6,8 +6,6 @@ import (
 	"log"
 	"os"
 	"sync"
-
-	_ "github.com/sportity/isuonline/lib/expvars"
 )
 
 var (
@@ -43,6 +41,9 @@ func main() {
 		go func(name string) {
 			defer wg.Done()
 			pkg := NewPackage(name, GOPATH)
+			if pkg == nil {
+				return
+			}
 			err := pkg.Refresh()
 			if err != nil {
 				fmt.Printf("%s: %s\n", red(name), redBold(err.Error()))

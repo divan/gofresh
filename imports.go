@@ -25,9 +25,7 @@ func Imports(dir string) ([]string, error) {
 		for _, file := range pkg.Files {
 			for _, impt := range file.Imports {
 				path := strings.Trim(impt.Path.Value, `"`)
-				if strings.HasPrefix(path, "git") {
-					imports[path] = struct{}{}
-				}
+				imports[path] = struct{}{}
 			}
 		}
 	}
