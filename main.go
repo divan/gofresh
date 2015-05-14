@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"sync"
 )
 
@@ -13,7 +14,7 @@ var (
 	dryRun = flag.Bool("dry-run", false, "Dry run")
 	expand = flag.Bool("expand", false, "Expand list of commits")
 
-	GOPATH = os.Getenv("GOPATH")
+	GOPATH string
 )
 
 func main() {
@@ -107,4 +108,12 @@ func Usage() {
 	fmt.Fprintf(os.Stderr, "gofresh [-options] [package(s)]\n")
 	fmt.Fprintf(os.Stderr, "Options:\n")
 	flag.PrintDefaults()
+}
+
+func init() {
+	// Get only first path from GOPATH
+	// TODO: add vendor dirs support
+	path := os.Getenv("GOPATH")
+	fields := strings.FieldsFunc(path, func(r rune) bool { return r == ':' })
+	GOPATH = fields[0]
 }
