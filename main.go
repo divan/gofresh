@@ -17,14 +17,25 @@ var (
 )
 
 func main() {
+	flag.Usage = Usage
 	flag.Parse()
 
-	imports, err := Imports(".")
-	if err != nil {
-		log.Fatal(err)
-	}
+	var packages []string
+	// In case package name(s) were specified, check only them
+	if len(flag.Args()) != 0 {
+		packages = flag.Args()
+		fmt.Printf("Checking %d packages for updates...\n", len(packages))
+	} else {
+		// otherwise, find imports for current package and
+		// subpackages
+		var err error
+		packages, err = Imports(".")
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	fmt.Printf("Found %d imports, checking for updates...\n", len(imports))
+		fmt.Printf("Found %d imports, checking for updates...\n", len(packages))
+	}
 
 	var (
 		wg   sync.WaitGroup
@@ -38,7 +49,7 @@ func main() {
 		}
 	}()
 
-	for _, name := range imports {
+	for _, name := range packages {
 		wg.Add(1)
 		go func(name string) {
 			defer wg.Done()
@@ -66,7 +77,7 @@ func main() {
 		for _, pkg := range outdated {
 			fmt.Println(green(pkg.UpdateCmd()))
 			if !*dryRun {
-				err = pkg.Update()
+				err := pkg.Update()
 				if err != nil {
 					fmt.Printf("%s: %s\n", red(pkg.Name), redBold(err.Error()))
 					return
@@ -89,4 +100,11 @@ func main() {
 	}
 	fmt.Printf(green("---\nYou have %d packages out of date\n", len(outdated)))
 	fmt.Println("To update all packages automatically, run", bold("gofresh -update"))
+}
+
+func Usage() {
+	fmt.Fprintf(os.Stderr, "gofresh [-options]\n")
+	fmt.Fprintf(os.Stderr, "gofresh [-options] [package(s)]\n")
+	fmt.Fprintf(os.Stderr, "Options:\n")
+	flag.PrintDefaults()
 }
