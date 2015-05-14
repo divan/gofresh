@@ -1,5 +1,7 @@
 # GoFresh
 
+[![Build Status](https://drone.io/github.com/divan/gofresh/status.png)](https://drone.io/github.com/divan/gofresh/latest)
+
 Keep your Go package dependencies fresh. Console tool for checking and updating package dependencies (imports).
 
 ## Introduction
