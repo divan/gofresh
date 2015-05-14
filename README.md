@@ -21,13 +21,23 @@ Just run go get:
 ## Usage
 
 Simply invoke *gofresh* and it will tell you if you have any updates for your imports.
+
+    gofresh
+
+You may also specify exact package to check:
+
+    gofresh golang.org/x/tools/go/vcs
+
 By default, it shows first 3 commits, but you can expand commits list using -expand flag. See -help for more details.
 
-    gofresh -h
-    Usage of gofresh:
-      -dry-run=false: Dry run
-      -expand=false: Expand list of commits
-      -update=false: Update all packages
+    $ gofresh -h
+	gofresh [-options]
+	gofresh [-options] [package(s)]
+	Options:
+	  -dry-run=false: Dry run
+	  -expand=false: Expand list of commits
+	  -update=false: Update all packages
+
 
 Using -update flag you can update automatically all packages.
 
