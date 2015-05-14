@@ -28,7 +28,7 @@ func (commits Commits) String() string {
 	}
 
 	if isLimited {
-		more := yellow(fmt.Sprintf("and %d more...", count-ShowMax))
+		more := yellow(fmt.Sprintf("and %d more...\n", count-ShowMax))
 		out = fmt.Sprintf("%s%s", out, more)
 	}
 

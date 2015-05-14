@@ -49,6 +49,7 @@ func main() {
 				fmt.Printf("%s: %s\n", red(name), redBold(err.Error()))
 				return
 			}
+
 			ch <- pkg
 
 		}(name)
@@ -82,7 +83,7 @@ func main() {
 	}
 
 	for _, pkg := range outdated {
-		fmt.Println(pkg)
+		fmt.Print(pkg)
 	}
 	fmt.Printf(green("---\nYou have %d packages out of date\n", len(outdated)))
 	fmt.Println("To update all packages automatically, run", bold("gofresh -update"))
