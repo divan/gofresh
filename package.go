@@ -75,14 +75,13 @@ func (p *Package) String() string {
 }
 
 // UpdateCmd returns command used to update package.
-func (p Package) UpdateCmd() string {
-	return fmt.Sprintf("go get -u %s", p.Name)
+func (p Package) UpdateCmd() []string {
+	return []string{"go", "get", "-u", p.Name}
 }
 
 // Update updates package to the latest revision.
 func (p *Package) Update() error {
-	cmd := p.UpdateCmd()
-	_, err := Run(cmd, p.Dir)
+	_, err := Run(p.Dir, "go", "get", "-u", p.Name)
 	return err
 }
 

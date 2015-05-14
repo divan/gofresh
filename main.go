@@ -13,8 +13,6 @@ var (
 	update = flag.Bool("update", false, "Update all packages")
 	dryRun = flag.Bool("dry-run", false, "Dry run")
 	expand = flag.Bool("expand", false, "Expand list of commits")
-
-	GOPATH string
 )
 
 func main() {
@@ -50,11 +48,12 @@ func main() {
 		}
 	}()
 
+	gopath := GOPATH()
 	for _, name := range packages {
 		wg.Add(1)
 		go func(name string) {
 			defer wg.Done()
-			pkg := NewPackage(name, GOPATH)
+			pkg := NewPackage(name, gopath)
 			if pkg == nil {
 				return
 			}
@@ -76,7 +75,8 @@ func main() {
 	// Update, if requested
 	if *update {
 		for _, pkg := range outdated {
-			fmt.Println(green(pkg.UpdateCmd()))
+			cmdline := strings.Join(pkg.UpdateCmd(), " ")
+			fmt.Println(green(cmdline))
 			if !*dryRun {
 				err := pkg.Update()
 				if err != nil {
@@ -110,10 +110,15 @@ func Usage() {
 	flag.PrintDefaults()
 }
 
-func init() {
-	// Get only first path from GOPATH
-	// TODO: add vendor dirs support
+// GOPATH returns GOPATH to be used for package update checks.
+//
+// In case there are many dirs in GOPATH, only the first will be used.
+// TODO: add multiple dirs support? someone use it w/o vendoring tools?
+func GOPATH() string {
 	path := os.Getenv("GOPATH")
-	fields := strings.FieldsFunc(path, func(r rune) bool { return r == ':' })
-	GOPATH = fields[0]
+	colonDelim := func(r rune) bool {
+		return r == ':'
+	}
+	fields := strings.FieldsFunc(path, colonDelim)
+	return fields[0]
 }
