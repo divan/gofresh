@@ -34,3 +34,7 @@ If you want to update them manually, use following flags to see the commands to 
     gofresh -update -dry-run
 
 <img src="./demo/demo1.png" alt="gofresh" width="800">
+
+## License
+
+This program is under [WTFPL license](http://www.wtfpl.net)
