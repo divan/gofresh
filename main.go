@@ -62,7 +62,7 @@ func main() {
 	// Update, if requested
 	if *update {
 		for _, pkg := range outdated {
-			fmt.Printf("Updating %s...\n", green(pkg.Name))
+			fmt.Println(green(pkg.UpdateCmd()))
 			if !*dryRun {
 				err = pkg.Update()
 				if err != nil {

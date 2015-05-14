@@ -8,6 +8,7 @@ import (
 	"golang.org/x/tools/go/vcs"
 )
 
+// Package represents single Go package/repo in Gopath.
 type Package struct {
 	Name string
 	Dir  string
@@ -16,10 +17,12 @@ type Package struct {
 	Commits Commits
 }
 
+// Packages is an obvious type, but I prefer to have golint happy.
 type Packages []*Package
 
 var emojiRune = '✅'
 
+// NewPackage returns new package.
 func NewPackage(name, gopath string) *Package {
 	dir := filepath.Join(gopath, "src", name)
 	repo, err := vcs.RepoRootForImportPath(name, false)
@@ -35,6 +38,10 @@ func NewPackage(name, gopath string) *Package {
 	}
 }
 
+// Refresh updates package info about new commits.
+//
+// It typically require internet connection to check
+// remote side.
 func (p *Package) Refresh() error {
 	var vcs VCS
 	switch p.Repo.VCS.Name {
@@ -54,10 +61,12 @@ func (p *Package) Refresh() error {
 	return nil
 }
 
+// IsOutdated returns true if package has updates on remote.
 func (p *Package) IsOutdated() bool {
 	return len(p.Commits) > 0
 }
 
+// String implements Stringer for Package.
 func (p *Package) String() string {
 	count := len(p.Commits)
 	out := fmt.Sprintf("%s [%c %d]\n", green(p.Name), emojiRune, count)
@@ -65,12 +74,19 @@ func (p *Package) String() string {
 	return out
 }
 
+// UpdateCmd returns command used to update package.
+func (p Package) UpdateCmd() string {
+	return fmt.Sprintf("go get -u %s", p.Name)
+}
+
+// Update updates package to the latest revision.
 func (p *Package) Update() error {
-	cmd := fmt.Sprintf("go get -u %s", p.Name)
+	cmd := p.UpdateCmd()
 	_, err := Run(cmd, p.Dir)
 	return err
 }
 
+// Outdated filters only outdated packages.
 func (pkgs Packages) Outdated() Packages {
 	var outdated Packages
 	for _, pkg := range pkgs {
