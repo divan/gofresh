@@ -47,10 +47,9 @@ func (p *Package) String() string {
 }
 
 func (p *Package) Update() error {
-	fmt.Println("Updating", p.Name, "...")
-	fmt.Sprintf("go get -u %s", p.Name)
-	//_, err := Run(cmd, ".")
-	return nil
+	cmd := fmt.Sprintf("go get -u %s", p.Name)
+	_, err := Run(cmd, p.Dir)
+	return err
 }
 
 func (pkgs Packages) Outdated() Packages {

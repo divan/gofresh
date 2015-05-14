@@ -24,7 +24,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Found %d imports, checking...\n", len(imports))
+	fmt.Printf("Found %d imports, checking for updates...\n", len(imports))
 
 	var (
 		wg   sync.WaitGroup
@@ -60,9 +60,8 @@ func main() {
 	// Update, if requested
 	if *update {
 		for _, pkg := range outdated {
-			if *dryRun {
-				fmt.Printf("Updating %s...\n", pkg.Name)
-			} else {
+			fmt.Printf("Updating %s...\n", green(pkg.Name))
+			if !*dryRun {
 				err = pkg.Update()
 				if err != nil {
 					fmt.Printf("%s: %s\n", red(pkg.Name), redBold(err.Error()))
@@ -71,11 +70,8 @@ func main() {
 			}
 		}
 
-		// check again
-		outdated = pkgs.Outdated()
-		if *dryRun {
-			outdated = Packages{}
-		}
+		// TODO: check again?
+		outdated = Packages{}
 	}
 
 	hasUpdate := len(outdated) > 0
@@ -86,8 +82,7 @@ func main() {
 		for _, pkg := range outdated {
 			fmt.Println(pkg)
 		}
-		fmt.Printf(green("You have %d packages out of date\n", len(outdated)))
+		fmt.Printf(green("---\nYou have %d packages out of date\n", len(outdated)))
 		fmt.Println("To update all packages automatically, run", bold("gofresh -update"))
 	}
-
 }
