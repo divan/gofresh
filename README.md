@@ -20,7 +20,7 @@ Just run go get:
 
 ## Usage
 
-Simply invoke *gofresh* and it will tell you if you have any updates for your imports.
+Simply invoke **gofresh** and it will tell you if you have any updates for your imports.
 
     gofresh
 
@@ -64,6 +64,11 @@ If you use vendoring tool, such as Godep, your workflow doesn't change much:
 * First, use gofresh to inspect updates and update if needed
 * Second, run ```godep save``` or similar to update vendor dir from your GOPATH
 * Commit update
+
+## Issues
+
+* No support for Bazaar & SVN *(how to check new commits on them?)*
+* Missing/failed repositories are not reported (no way to identify error from vcs.RepoRootForImportPath)
 
 ## License
 

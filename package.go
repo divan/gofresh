@@ -25,7 +25,7 @@ var emojiRune = '✅'
 // NewPackage returns new package.
 func NewPackage(name, gopath string) (*Package, error) {
 	dir := filepath.Join(gopath, "src", name)
-	repo, err := vcs.RepoRootForImportPath(name, true)
+	repo, err := vcs.RepoRootForImportPath(name, false)
 	if err != nil {
 		// it's ok, silently discard errors here
 		return nil, err
