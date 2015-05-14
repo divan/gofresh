@@ -69,6 +69,7 @@ If you use vendoring tool, such as Godep, your workflow doesn't change much:
 
 * No support for Bazaar & SVN *(how to check new commits on them?)*
 * Missing/failed repositories are not reported (no way to identify error from vcs.RepoRootForImportPath)
+* Subpackages from the same repo will be checked all anyway (TODO: optimize)
 
 ## License
 
