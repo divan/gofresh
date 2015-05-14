@@ -47,6 +47,24 @@ If you want to update them manually, use following flags to see the commands to 
 
 <img src="./demo/demo1.png" alt="gofresh" width="800">
 
+## Workflow
+
+Typically, you simply invoke **gofresh** in your package dir to see what dependencies has been changed. Then you might want to see all new commits for the specific package and update it manually or update all automatically:
+
+    $ gofresh
+    $ gofresh -expand github.com/howeyc/fsnotify
+	$ gofresh -update
+
+<img src="./demo/demo2.png" alt="gofresh" width="800">
+
+## Using with vendoring tools
+
+If you use vendoring tool, such as Godep, your workflow doesn't change much:
+
+* First, use gofresh to inspect updates and update if needed
+* Second, run ```godep save``` or similar to update vendor dir from your GOPATH
+* Commit update
+
 ## License
 
 This program is under [WTFPL license](http://www.wtfpl.net)
