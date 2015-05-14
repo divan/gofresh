@@ -53,11 +53,11 @@ func main() {
 		wg.Add(1)
 		go func(name string) {
 			defer wg.Done()
-			pkg := NewPackage(name, gopath)
-			if pkg == nil {
+			pkg, err := NewPackage(name, gopath)
+			if err != nil {
 				return
 			}
-			err := pkg.Refresh()
+			err = pkg.Refresh()
 			if err != nil {
 				fmt.Printf("%s: %s\n", red(name), redBold(err.Error()))
 				return

@@ -23,19 +23,19 @@ type Packages []*Package
 var emojiRune = '✅'
 
 // NewPackage returns new package.
-func NewPackage(name, gopath string) *Package {
+func NewPackage(name, gopath string) (*Package, error) {
 	dir := filepath.Join(gopath, "src", name)
-	repo, err := vcs.RepoRootForImportPath(name, false)
+	repo, err := vcs.RepoRootForImportPath(name, true)
 	if err != nil {
 		// it's ok, silently discard errors here
-		return nil
+		return nil, err
 	}
 	return &Package{
 		Name: name,
 		Dir:  dir,
 
 		Repo: repo,
-	}
+	}, nil
 }
 
 // Refresh updates package info about new commits.
