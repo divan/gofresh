@@ -14,7 +14,7 @@ GoFresh checks if there are any updates for imports in your package. It doesn't 
 
 Just run go get:
 
-   go get github.com/divan/gofresh
+    go get github.com/divan/gofresh
 
 ## Usage
 
