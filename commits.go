@@ -2,8 +2,8 @@ package main
 
 import "fmt"
 
-// ShowMax limits number of commits to show.
-const ShowMax = 3
+// MaxCommits limits number of commits to show.
+const MaxCommits = 3
 
 type Commits []string
 
@@ -14,9 +14,13 @@ func (commits Commits) String() string {
 
 	count := len(commits)
 
-	isLimited := count > ShowMax
+	Max := MaxCommits
+	if *expand {
+		Max = count
+	}
+	isLimited := count > Max
 
-	limit := ShowMax
+	limit := Max
 	if !isLimited {
 		limit = count
 	}
@@ -28,7 +32,7 @@ func (commits Commits) String() string {
 	}
 
 	if isLimited {
-		more := yellow(fmt.Sprintf("and %d more...\n", count-ShowMax))
+		more := yellow(fmt.Sprintf("and %d more...\n", count-Max))
 		out = fmt.Sprintf("%s%s", out, more)
 	}
 

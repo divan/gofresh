@@ -11,6 +11,8 @@ import (
 var (
 	update = flag.Bool("update", false, "Update all packages")
 	dryRun = flag.Bool("dry-run", false, "Dry run")
+	expand = flag.Bool("expand", false, "Expand list of commits")
+
 	GOPATH = os.Getenv("GOPATH")
 )
 
