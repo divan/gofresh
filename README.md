@@ -20,11 +20,11 @@ Just run go get:
 
 ## Usage
 
-Simply invoke **gofresh** and it will tell you if you have any updates for your imports.
+Simply invoke **gofresh** inside a directory containing Go source files and it will tell you if you have any updates for your imports.
 
     gofresh
 
-You may also specify exact package to check:
+To check a package in your $GOPATH, you can specify the exact package by name:
 
     gofresh golang.org/x/tools/go/vcs
 
@@ -51,9 +51,10 @@ If you want to update them manually, use following flags to see the commands to 
 
 Typically, you simply invoke **gofresh** in your package dir to see what dependencies has been changed. Then you might want to see all new commits for the specific package and update it manually or update all automatically:
 
+    $ cd src/github.com/myusername/myproject/
     $ gofresh
     $ gofresh -expand github.com/howeyc/fsnotify
-	$ gofresh -update
+    $ gofresh -update
 
 <img src="./demo/demo2.png" alt="gofresh" width="800">
 
