@@ -20,8 +20,10 @@ func main() {
 	flag.Parse()
 
 	var packages []string
+
 	// In case package name(s) were specified, check only them
-	if len(flag.Args()) != 0 {
+	byName := len(flag.Args()) != 0
+	if byName {
 		packages = flag.Args()
 		fmt.Printf("Checking %d packages for updates...\n", len(packages))
 	} else {
@@ -37,9 +39,10 @@ func main() {
 	}
 
 	var (
-		wg   sync.WaitGroup
-		pkgs Packages
-		ch   = make(chan *Package)
+		wg     sync.WaitGroup
+		pkgs   Packages
+		ch     = make(chan *Package)
+		failed bool
 	)
 
 	go func() {
@@ -55,10 +58,19 @@ func main() {
 			defer wg.Done()
 			pkg, err := NewPackage(name, gopath)
 			if err != nil {
+				// There always will be error, when processing imports from
+				// source, like 'fmt', 'net/http', etc.
+				// But for explicitly specified packages by name, we should
+				// show user an error.
+				if byName {
+					failed = true
+					fmt.Printf("%s: %s\n", red(name), redBold(err.Error()))
+				}
 				return
 			}
 			err = pkg.Refresh()
 			if err != nil {
+				failed = true
 				fmt.Printf("%s: %s\n", red(name), redBold(err.Error()))
 				return
 			}
@@ -81,7 +93,8 @@ func main() {
 				err := pkg.Update()
 				if err != nil {
 					fmt.Printf("%s: %s\n", red(pkg.Name), redBold(err.Error()))
-					return
+					failed = true
+					continue
 				}
 			}
 		}
@@ -91,8 +104,11 @@ func main() {
 	}
 
 	upToDate := len(outdated) == 0
-	if upToDate {
+	if upToDate && !failed {
 		fmt.Println("Everything is up to date.")
+		return
+	} else if upToDate && failed {
+		fmt.Println("There were some errors, check incomplete or wrong usage.")
 		return
 	}
 
