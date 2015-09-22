@@ -11,7 +11,7 @@ import (
 
 var (
 	update = flag.Bool("update", false, "Update all packages")
-	force  = flag.Bool("force", false, "Use force while updating packages")
+	force  = flag.Bool("f", false, "Use force while updating packages")
 	dryRun = flag.Bool("dry-run", false, "Dry run")
 	expand = flag.Bool("expand", false, "Expand list of commits")
 )
