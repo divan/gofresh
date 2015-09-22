@@ -34,10 +34,13 @@ By default, it shows first 3 commits, but you can expand commits list using -exp
 	gofresh [-options]
 	gofresh [-options] [package(s)]
 	Options:
-	  -dry-run=false: Dry run
-	  -expand=false: Expand list of commits
-	  -update=false: Update all packages
-
+	  -dry-run
+			Dry run
+	  -expand
+			Expand list of commits
+	  -f	Use force while updating packages
+	  -update
+			Update all packages
 
 Using -update flag you can update automatically all packages.
 
