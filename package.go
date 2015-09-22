@@ -75,14 +75,21 @@ func (p *Package) String() string {
 }
 
 // UpdateCmd returns command used to update package.
-func (p Package) UpdateCmd() []string {
+func (p Package) UpdateCmd(force bool) []string {
+	if force {
+		return []string{"go", "get", "-u", "-f", p.Name}
+	}
 	return []string{"go", "get", "-u", p.Name}
 }
 
 // Update updates package to the latest revision.
-func (p *Package) Update() error {
-	_, err := Run(p.Dir, "go", "get", "-u", p.Name)
-	return err
+func (p *Package) Update(force bool) (err error) {
+	if force {
+		_, err = Run(p.Dir, "go", "get", "-u", "-f", p.Name)
+		return
+	}
+	_, err = Run(p.Dir, "go", "get", "-u", p.Name)
+	return
 }
 
 // Outdated filters only outdated packages.

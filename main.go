@@ -11,6 +11,7 @@ import (
 
 var (
 	update = flag.Bool("update", false, "Update all packages")
+	force  = flag.Bool("force", false, "Use force while updating packages")
 	dryRun = flag.Bool("dry-run", false, "Dry run")
 	expand = flag.Bool("expand", false, "Expand list of commits")
 )
@@ -87,10 +88,10 @@ func main() {
 	// Update, if requested
 	if *update {
 		for _, pkg := range outdated {
-			cmdline := strings.Join(pkg.UpdateCmd(), " ")
+			cmdline := strings.Join(pkg.UpdateCmd(*force), " ")
 			fmt.Println(green(cmdline))
 			if !*dryRun {
-				err := pkg.Update()
+				err := pkg.Update(*force)
 				if err != nil {
 					fmt.Printf("%s: %s\n", red(pkg.Name), redBold(err.Error()))
 					failed = true
