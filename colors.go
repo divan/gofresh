@@ -2,9 +2,12 @@ package main
 
 import (
 	"github.com/fatih/color"
+	"github.com/mattn/go-colorable"
 )
 
 var (
+	stdout = colorable.NewColorableStdout()
+
 	bold    = color.New(color.FgWhite).Add(color.Bold).SprintfFunc()
 	red     = color.New(color.FgRed).SprintfFunc()
 	redBold = color.New(color.FgRed).Add(color.Bold).SprintfFunc()

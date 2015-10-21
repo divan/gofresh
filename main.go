@@ -26,7 +26,7 @@ func main() {
 	byName := len(flag.Args()) != 0
 	if byName {
 		packages = flag.Args()
-		fmt.Printf("Checking %d packages for updates...\n", len(packages))
+		fmt.Fprintf(stdout, "Checking %d packages for updates...\n", len(packages))
 	} else {
 		// otherwise, find imports for current package and
 		// subpackages
@@ -36,7 +36,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		fmt.Printf("Found %d imports, checking for updates...\n", len(packages))
+		fmt.Fprintf(stdout, "Found %d imports, checking for updates...\n", len(packages))
 	}
 
 	var (
@@ -65,14 +65,14 @@ func main() {
 				// show user an error.
 				if byName {
 					failed = true
-					fmt.Printf("%s: %s\n", red(name), redBold(err.Error()))
+					fmt.Fprintf(stdout, "%s: %s\n", red(name), redBold(err.Error()))
 				}
 				return
 			}
 			err = pkg.Refresh()
 			if err != nil {
 				failed = true
-				fmt.Printf("%s: %s\n", red(name), redBold(err.Error()))
+				fmt.Fprintf(stdout, "%s: %s\n", red(name), redBold(err.Error()))
 				return
 			}
 
@@ -89,11 +89,11 @@ func main() {
 	if *update {
 		for _, pkg := range outdated {
 			cmdline := strings.Join(pkg.UpdateCmd(*force), " ")
-			fmt.Println(green(cmdline))
+			fmt.Fprintln(stdout, green(cmdline))
 			if !*dryRun {
 				err := pkg.Update(*force)
 				if err != nil {
-					fmt.Printf("%s: %s\n", red(pkg.Name), redBold(err.Error()))
+					fmt.Fprintf(stdout, "%s: %s\n", red(pkg.Name), redBold(err.Error()))
 					failed = true
 					continue
 				}
@@ -106,18 +106,18 @@ func main() {
 
 	upToDate := len(outdated) == 0
 	if upToDate && !failed {
-		fmt.Println("Everything is up to date.")
+		fmt.Fprintln(stdout, "Everything is up to date.")
 		return
 	} else if upToDate && failed {
-		fmt.Println("There were some errors, check incomplete or wrong usage.")
+		fmt.Fprintln(stdout, "There were some errors, check incomplete or wrong usage.")
 		return
 	}
 
 	for _, pkg := range outdated {
 		fmt.Print(pkg)
 	}
-	fmt.Printf(green("---\nYou have %d packages out of date\n", len(outdated)))
-	fmt.Println("To update all packages automatically, run", bold("gofresh -update"))
+	fmt.Fprintf(stdout, green("---\nYou have %d packages out of date\n", len(outdated)))
+	fmt.Fprintln(stdout, "To update all packages automatically, run", bold("gofresh -update"))
 }
 
 func Usage() {
