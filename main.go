@@ -133,9 +133,6 @@ func Usage() {
 // TODO: add multiple dirs support? someone use it w/o vendoring tools?
 func GOPATH() string {
 	path := os.Getenv("GOPATH")
-	colonDelim := func(r rune) bool {
-		return r == ':'
-	}
-	fields := strings.FieldsFunc(path, colonDelim)
+	fields := strings.Split(path, string(os.PathListSeparator))
 	return fields[0]
 }
