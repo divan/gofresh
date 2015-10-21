@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime"
 	"strings"
 	"sync"
 )
@@ -135,6 +136,11 @@ func GOPATH() string {
 	path := os.Getenv("GOPATH")
 	colonDelim := func(r rune) bool {
 		return r == ':'
+	}
+	if runtime.GOOS == "windows" {
+		colonDelim = func(r rune) bool {
+			return r == ';'
+		}
 	}
 	fields := strings.FieldsFunc(path, colonDelim)
 	return fields[0]
