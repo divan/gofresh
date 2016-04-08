@@ -75,6 +75,10 @@ If you use vendoring tool, such as Godep, your workflow doesn't change much:
 * Missing/failed repositories are not reported (no way to identify error from vcs.RepoRootForImportPath)
 * Subpackages from the same repo will be checked all anyway (TODO: optimize)
 
+## Alternatives
+
+* [Go-Package-Store](https://github.com/shurcooL/Go-Package-Store) - displays updates for the Go packages in your GOPATH and shows with a nice Web UI.
+
 ## License
 
 This program is under [WTFPL license](http://www.wtfpl.net)
